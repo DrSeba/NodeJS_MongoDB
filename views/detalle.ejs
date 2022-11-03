@@ -1,0 +1,79 @@
+<%- include("template/cabecera", {tituloWeb: 'Pacientes'}) %>
+
+  <div class="container">
+    
+    <h1>Datos Paciente</h1>
+  
+    <% if (error) { %>
+        <%= mensaje %> 
+        <a 
+            href="/pacientes"
+            class="btn btn-dark btn-block my-2"
+        >
+            Volver
+        </a>
+    <% } %>
+
+    <% if (!error) { %>
+
+<form id="formularioEditar" data-id= <%= paciente.id %>>
+    <input id="nombreInput" type="text" class="form-control my-2" name="nombre" value="<%= paciente.nombre %>">
+    <input id="apellidoInput" type="text" class="form-control my-2" name="nombre" value="<%= paciente.apellido %>">
+    <input id="dniInput" type="number" class="form-control my-2" name="nombre" value="<%= paciente.dni %>">
+    <input id="obraInput" type="text" class="form-control my-2" name="nombre" value="<%= paciente.obraSocial %>">
+    <input id="fechaInput" type="number" class="form-control my-2" name="nombre" value="<%= paciente.fechaNacimiento %>">
+    <button type="submit" class="btn btn-warning btn-block">Editar</button>
+</form>
+
+<button class="btn btn-danger btn-sm mt-5" id="btnEliminar" data-id= <%= paciente.id %>>Eliminar</button>
+        
+    <% } %>
+     
+  </div>
+    
+<%- include("template/footer") %>
+
+<script>
+    
+    const btnEliminar = document.querySelector('#btnEliminar')
+    btnEliminar.addEventListener('click', async () => {
+    const id = btnEliminar.dataset.id 
+    try {
+     const data = await fetch(`/pacientes/${btnEliminar.dataset.id}`, {
+          method: 'delete'
+     })
+        const res = await data.json()
+        if(res.estado){
+            window.location.href = '/pacientes'
+        }else{
+            console.log(res)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+const formularioEditar = document.querySelector('#formularioEditar')
+formularioEditar.addEventListener('submit', async (e) => {
+    e.preventDefault()
+        const nombre = document.querySelector('#nombreInput').value
+        const apellido = document.querySelector('#apellidoInput').value
+        const dni = document.querySelector('#dniInput').value
+        const obraSocial = document.querySelector('#obraInput').value
+        const fechaNacimiento = document.querySelector('#fechaInput').value
+
+        const id = formularioEditar.dataset.id
+        try {
+            const data = await fetch(`/pacientes/${id}`, { method: 'put', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({nombre, apellido, dni, obraSocial, fechaNacimiento}) })
+            const res = await data.json()
+            console.log(res)
+            if(res.estado) {
+                window.location.href = '/pacientes'
+        } else{
+            console.log(res)
+            }
+        } catch (error) {
+        console.log(error)
+    }
+})
+</script>

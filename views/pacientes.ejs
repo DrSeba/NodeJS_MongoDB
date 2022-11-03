@@ -1,0 +1,56 @@
+<%- include("template/cabecera", {tituloWeb: 'Pagina de inicio'}) %>
+
+    <div class="container">
+    
+        <h1>Para vos enano que lo miras por tv jaja</h1>
+
+        <a
+            class="btn btn-success btn-block my-4"
+            href="/pacientes/crear"
+        >
+        Ingresar nuevo paciente
+        </a>
+
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">D.N.I</th>
+                <th scope="col">Obra social</th>
+                <th scope="col">Fecha de nacimiento</th>
+                <th scope="col">Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+                
+                <% if (listaPacientes.length > 0) { %>
+                    <% listaPacientes.forEach(pacientes => { %>
+                        <tr>
+                            <th scope="row"><%= pacientes.id %> </th>
+                            <td><%= pacientes.nombre %></td>
+                            <td><%= pacientes.apellido %></td>
+                            <td><%= pacientes.dni %></td>
+                            <td><%= pacientes.obraSocial %></td>
+                            <td><%= pacientes.fechaNacimiento %></td>
+                            <td>
+                                <a
+                        class="btn btn-warning btn-sm"
+                        href="pacientes/<%= pacientes.id %>"
+                        >
+                        Editar
+                        </a>
+                            </td>
+                          </tr>
+
+                    <% }) %>
+                <% } %>
+                
+            </tbody>
+        </table>
+        
+        
+    </div>
+
+<%- include("template/footer") %>
